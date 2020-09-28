@@ -34,10 +34,10 @@ public class JDBCExample {
     
     public static void main(String args[]){
         try {
-            String url="jdbc:mysql://HOST:3306/BD";
+            String url="jdbc:mysql://desarrollo.is.escuelaing.edu.co:3306/bdprueba";
             String driver="com.mysql.jdbc.Driver";
-            String user="USER";
-            String pwd="PWD";
+            String user="bdprueba";
+            String pwd="prueba2019";
                         
             Class.forName(driver);
             Connection con=DriverManager.getConnection(url,user,pwd);
@@ -83,7 +83,13 @@ public class JDBCExample {
         //Crear preparedStatement
         //Asignar parámetros
         //usar 'execute'
-
+        String INSERT = "INSERT INTO ORD_PRODUCTOS (codigo, nombre, precio) VALUES (?,?,?)";
+        
+        PreparedStatement string = con.prepareStatement(INSERT);
+        string.setString(1,String.valueOf(codigo));
+        string.setString(2,nombre);
+        string.setString(3,String.valueOf(precio));
+        string.execute();
         
         con.commit();
         
@@ -93,11 +99,21 @@ public class JDBCExample {
      * Consultar los nombres de los productos asociados a un pedido
      * @param con la conexión JDBC
      * @param codigoPedido el código del pedido
-     * @return 
+     * @return
      */
     public static List<String> nombresProductosPedido(Connection con, int codigoPedido){
         List<String> np=new LinkedList<>();
         
+        String SELECT=  "SELECT nombre FROM ORD_DETALLE_PEDIDO JOIN ORD_PRODUCTOS ON pedido_fk = codigo WHERE pedido_fk = ?";
+        
+        PreparedStatement string = con.prepareStatement(SELECT);
+        string.setString(1,String.valueOf(codigoPedido));
+        Result r = string.execute();
+        
+        
+        {
+            
+        }
         //Crear prepared statement
         //asignar parámetros
         //usar executeQuery
