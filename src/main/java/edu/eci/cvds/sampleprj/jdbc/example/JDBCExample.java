@@ -57,8 +57,8 @@ public class JDBCExample {
             System.out.println("-----------------------");
             
             
-            int suCodigoECI=20134423;
-            registrarNuevoProducto(con, suCodigoECI, "SU NOMBRE", 99999999);            
+            int suCodigoECI=2160666;
+            registrarNuevoProducto(con, suCodigoECI, "Javier López", 99999999);            
             con.commit();
                         
             
@@ -85,6 +85,8 @@ public class JDBCExample {
         //usar 'execute'
         String INSERT = "INSERT INTO ORD_PRODUCTOS (codigo, nombre, precio) VALUES (?,?,?)";
         
+        //String INSERT = "DELETE FROM ORD_PRODUCTOS WHERE codigo = ? AND nombre = ? AND precio = ?";
+        
         PreparedStatement string = con.prepareStatement(INSERT);
         string.setString(1,String.valueOf(codigo));
         string.setString(2,nombre);
@@ -104,7 +106,11 @@ public class JDBCExample {
     public static List<String> nombresProductosPedido(Connection con, int codigoPedido) throws SQLException{
         List<String> np=new LinkedList<>();
         
-        String SELECT=  "SELECT nombre\n" + "FROM ORD_DETALLE_PEDIDO JOIN ORD_PRODUCTOS ON pedido_fk = codigo WHERE pedido_fk = ?";
+        String SELECT=  "SELECT opr.nombre " + 
+                                "FROM ORD_PRODUCTOS AS opr " + 
+                                "INNER JOIN ORD_DETALLE_PEDIDO AS odpe " + 
+                                "ON opr.codigo=odpe.producto_fk " + 
+                                "where odpe.pedido_fk=?";
         
         PreparedStatement string = con.prepareStatement(SELECT);
         string.setString(1,String.valueOf(codigoPedido));
@@ -132,7 +138,11 @@ public class JDBCExample {
      */
     public static int valorTotalPedido(Connection con, int codigoPedido) throws SQLException{
         
-        String SELECT = "SELECT SUM(CANTIDAD*PRECIO) FROM ORD_DETALLE_PEDIDO JOIN ORD_PRODUCTOS ON pedido_fk=codigo WHERE pedido_fk= ?";
+        String SELECT = "SELECT SUM(opr.precio * odpe.cantidad) " + 
+                                "FROM ORD_PRODUCTOS AS opr " + 
+                                "INNER JOIN ORD_DETALLE_PEDIDO AS odpe " + 
+                                "ON opr.codigo=odpe.producto_fk " + 
+                                "where odpe.pedido_fk=?";
         
         PreparedStatement string = con.prepareStatement(SELECT);
         string.setString(1,String.valueOf(codigoPedido));
