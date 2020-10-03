@@ -63,7 +63,7 @@ public class MyBatisExample {
      * @param args
      * @throws SQLException 
      */
-    public static void main(String args[]) throws SQLException {
+    public static void main(String args[]) throws SQLException, ParseException {
         SqlSessionFactory sessionfact = getSqlSessionFactory();
 
         SqlSession sqlss = sessionfact.openSession();
@@ -71,8 +71,9 @@ public class MyBatisExample {
         ClienteMapper cm=sqlss.getMapper(ClienteMapper.class);
         
         //System.out.println(cm.consultarClientes());
-        System.out.println(cm.consultarCliente(2137885));
         
+        cm.agregarItemRentadoACliente(2160666,4,new SimpleDateFormat("yyyy/MM/dd").parse("2020/10/02"),new SimpleDateFormat("yyyy/MM/dd").parse("2020/10/03"));
+        System.out.println(cm.consultarCliente(2160666));
         //Crear el mapper y usarlo: 
         //ClienteMapper cm=sqlss.getMapper(ClienteMapper.class)
         //cm...
