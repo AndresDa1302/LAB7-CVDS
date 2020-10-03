@@ -15,6 +15,36 @@
         <result property="genero" column="genero"/>
         <association property="tipo" javaType="TipoItem" columnPrefix="ti_" resultMap="edu.eci.cvds.sampleprj.dao.mybatis.mappers.TipoItemMapper.TipoItemResult"></association>
     </resultMap>
-    
-    
+    <select parameterType="map" id="consultarItems" resultMap="ItemResult">
+        select 
+	i.id,
+	i.nombre,
+	i.descripcion,
+	i.fechalanzamiento,
+	i.tarifaxdia,
+	i.formatorenta,
+	i.genero,
+
+	ti.id,
+	ti.descripcion
+	
+	FROM VI_ITEMS as i
+	left join VI_TIPOITEM as ti on i.TIPOITEM_id = ti.id 
+    </select>
+    <select parameterType="map" id="consultarItem" resultMap="ItemResult">
+        select 
+	i.id,
+	i.nombre,
+	i.descripcion,
+	i.fechalanzamiento,
+	i.tarifaxdia,
+	i.formatorenta,
+	i.genero,
+
+	ti.id,
+	ti.descripcion
+	
+	FROM VI_ITEMS as i
+	left join VI_TIPOITEM as ti on i.TIPOITEM_id = ti.id where i.id = #{itid}
+    </select>
 </mapper>
