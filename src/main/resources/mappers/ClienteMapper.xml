@@ -7,32 +7,32 @@
     <select parameterType="map" id="consultarClientes" resultMap="ClienteResult">
 	select
     
-        c.nombre,
-        c.documento,
-        c.telefono,
-        c.direccion,
-        c.email,
-        c.vetado,
+            c.nombre,
+            c.documento,
+            c.telefono,
+            c.direccion,
+            c.email,
+            c.vetado,
 
-        ir.id ,
-        ir.fechainiciorenta ,
-        ir.fechafinrenta ,
+            ir.id as ir_id ,
+            ir.fechainiciorenta as ir_fechainiciorenta,
+            ir.fechafinrenta as ir_fechafinrenta,
 
-        i.id ,
-        i.nombre ,
-        i.descripcion ,
-        i.fechalanzamiento ,
-        i.tarifaxdia ,
-        i.formatorenta ,
-        i.genero ,        
-        ti.id ,
-        ti.descripcion 
+            i.id ,
+            i.nombre ,
+            i.descripcion ,
+            i.fechalanzamiento ,
+            i.tarifaxdia ,
+            i.formatorenta ,
+            i.genero ,        
+            ti.id ,
+            ti.descripcion 
 
 
-        FROM VI_CLIENTES as c 
-        left join VI_ITEMRENTADO as ir on c.documento=ir.CLIENTES_documento 
-        left join VI_ITEMS as i on ir.ITEMS_id=i.id 
-        left join VI_TIPOITEM as ti on i.TIPOITEM_id=ti.id 
+            FROM VI_CLIENTES as c 
+            left join VI_ITEMRENTADO as ir on c.documento=ir.CLIENTES_documento 
+            left join VI_ITEMS as i on ir.ITEMS_id=i.id 
+            left join VI_TIPOITEM as ti on i.TIPOITEM_id=ti.id 
     </select> 
     <resultMap type="Cliente" id="ClienteResult">
         <id property="documento" column="documento"/>
@@ -41,7 +41,42 @@
         <result property="direccion" column="direccion"/>  
         <result property="email" column="email"/>
         <result property="vetado" column="vetado"/>
-        <collection property='rentados' ofType='ItemRentado' resultMap='edu.eci.cvds.sampleprj.dao.mybatis.mappers.ItemRentadoMapper.ItemRentadoResult' columnPrefix="ir_"></collection>
+        <collection property="rentados" ofType="ItemRentado" resultMap="edu.eci.cvds.sampleprj.dao.mybatis.mappers.ItemRentadoMapper.ItemRentadoResult" columnPrefix="ir_"></collection>
     </resultMap>
           	
+    <select parameterType="map" id="consultarCliente" resultMap="ClienteResult">
+		select
+    
+                c.nombre,
+                c.documento,
+                c.telefono,
+                c.direccion,
+                c.email,
+                c.vetado,
+
+                ir.id ,
+                ir.fechainiciorenta ,
+                ir.fechafinrenta ,
+
+                i.id ,
+                i.nombre ,
+                i.descripcion ,
+                i.fechalanzamiento ,
+                i.tarifaxdia ,
+                i.formatorenta ,
+                i.genero ,        
+                ti.id ,
+                ti.descripcion 
+
+
+                FROM VI_CLIENTES as c 
+                left join VI_ITEMRENTADO as ir on c.documento=ir.CLIENTES_documento 
+                left join VI_ITEMS as i on ir.ITEMS_id=i.id 
+                left join VI_TIPOITEM as ti on i.TIPOITEM_id=ti.id where c.documento=#{idcli}
+    </select>
+    <insert id="agregarItemRentadoACliente" parameterType="map">
+        insert into VI_ITEMRENTADO (CLIENTES_documento,ITEMS_id,fechainiciorenta,fechafinrenta)
+        values (#{idc},#{idit},#{fechai},#{fechaf})
+    </insert>            
+           
 </mapper>
